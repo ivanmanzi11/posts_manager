@@ -49,22 +49,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> deletePost(int id) async {
-  setState(() {
-    posts.removeWhere((post) => post.id == id);
-  });
+    setState(() {
+      posts.removeWhere((post) => post.id == id);
+    });
 
-  try {
-    await apiService.deletePost(id);
-  } catch (e) {
-    print("Delete API failed but removed locally");
+    try {
+      await apiService.deletePost(id);
+    } catch (e) {
+      print("Delete API failed but removed locally");
+    }
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Post deleted')),
+    );
   }
-
-  if (!mounted) return;
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Post deleted')),
-  );
-}
 
   void goToCreateScreen() async {
     final newPost = await Navigator.push(
@@ -100,70 +100,100 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void goToDetailScreen(Post post) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => PostDetailScreen(post: post),
-    ),
-  );
-}
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PostDetailScreen(post: post),
+      ),
+    );
+  }
 
-
-void logout() {
-  Navigator.pushReplacementNamed(context, '/login');
-}
+  void logout() {
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /// 🔵 MATCH DETAIL SCREEN BACKGROUND
+      backgroundColor: Colors.blue[100],
+
       appBar: AppBar(
-        title: const Text(
-  "Posts Manager",
-  style: TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.blue,
-  ),
-),
+        backgroundColor: Colors.blue,
+        elevation: 2,
         centerTitle: true,
+        title: const Text(
+          "Posts Manager",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         actions: [
-
-    IconButton(
-      icon: const Icon(Icons.logout, color: Colors.blue),
-      onPressed: logout,
-    ),
-
-  ],
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: logout,
+          ),
+        ],
       ),
+
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : errorMessage != null
               ? Center(child: Text('Error: $errorMessage'))
               : posts.isEmpty
                   ? const Center(child: Text('No posts found'))
-                  : RefreshIndicator(
-                      onRefresh: refreshPosts,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.only(top: 8, bottom: 80),
-                        itemCount: posts.length,
-                        itemBuilder: (context, index) {
-                          final post = posts[index];
-                          return PostCard(
-                            post: post,
-                            onTap: () => goToDetailScreen(post),
-                            onEdit: () => goToEditScreen(post),
-                            onDelete: () => deletePost(post.id!),
-                          );
-                        },
-                      ),
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        /// 🔹 SECTION TITLE (like detail screen)
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(16, 12, 16, 6),
+                          child: Text(
+                            "Posts",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+
+                        /// 📜 LIST
+                        Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: refreshPosts,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 80),
+                              itemCount: posts.length,
+                              itemBuilder: (context, index) {
+                                final post = posts[index];
+                                return PostCard(
+                                  post: post,
+                                  onTap: () => goToDetailScreen(post),
+                                  onEdit: () => goToEditScreen(post),
+                                  onDelete: () => deletePost(post.id!),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+
+      /// 🔵 MATCH BUTTON STYLE
       floatingActionButton: FloatingActionButton.extended(
-  onPressed: goToCreateScreen,
-  icon: const Icon(Icons.add, color: Colors.blue),
-  label: const Text(
-    "New Post",
-    style: TextStyle(color: Colors.blue),
-  ),
-),
+        backgroundColor: Colors.blue,
+        onPressed: goToCreateScreen,
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text(
+          "New Post",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
     );
   }
 }

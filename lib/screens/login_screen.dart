@@ -10,12 +10,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   void login() {
-
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill all fields")),
@@ -32,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      /// 🔵 MATCH OTHER SCREENS
+      backgroundColor: Colors.blue[100],
 
       body: Center(
         child: SingleChildScrollView(
@@ -42,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
 
+                /// 👤 ICON
                 const Icon(
                   Icons.account_circle,
                   size: 90,
@@ -50,10 +50,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 10),
 
+                /// 🔹 TITLE
                 const Text(
                   "Sign in to your account",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     color: Colors.blue,
                   ),
@@ -61,10 +63,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 30),
 
+                /// 🧾 CARD FORM
                 Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(16),
                   ),
 
                   child: Padding(
@@ -73,29 +76,50 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
 
+                        /// EMAIL
                         TextField(
                           controller: emailController,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.email),
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.email),
                             labelText: "Email",
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.blue,
+                                width: 2,
+                              ),
+                            ),
                           ),
                         ),
 
                         const SizedBox(height: 16),
 
+                        /// PASSWORD
                         TextField(
                           controller: passwordController,
                           obscureText: true,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.lock),
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.lock),
                             labelText: "Password",
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.blue,
+                                width: 2,
+                              ),
+                            ),
                           ),
                         ),
 
                         const SizedBox(height: 20),
 
+                        /// 🔵 LOGIN BUTTON
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -103,8 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               backgroundColor: Colors.blue,
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(12),
                               ),
+                              elevation: 3,
                             ),
                             onPressed: login,
                             child: const Text(
@@ -112,13 +137,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
 
+                        /// 🔗 SIGNUP LINK
                         TextButton(
                           onPressed: () {
                             Navigator.push(
@@ -130,10 +157,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: const Text(
                             "Create an account",
-                            style: TextStyle(color: Colors.blue),
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        )
-
+                        ),
                       ],
                     ),
                   ),
